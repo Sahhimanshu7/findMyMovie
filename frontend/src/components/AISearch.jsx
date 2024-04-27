@@ -1,14 +1,26 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const AISearch = () => {
-  const { register, handleSubmit } = useForm();
-  const [data, setData] = useState("");
+  const [output, setOutput] = useState("");
+  const [userPrompt, setUserPrompt] = useState("");
 
-  if(data !== ""){
-    console.log(data);
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    try {
+      const getResult = async() => {
+        const result = await axios.post("http://localhost:8000/api/ai/get-ai-result", {
+          userPrompt: userPrompt
+        })
+        console.log(result);
+        setOutput(result);
+      }
+      getResult();
+    } catch (error) {
+      console.log(error);
+    }
   }
-
+    
   return (
     <section>
       <div>
@@ -17,10 +29,10 @@ const AISearch = () => {
         </h1>
         <div>
           <form 
-            onSubmit={handleSubmit((data) => setData(JSON.stringify(data)))}
+            onSubmit={handleSubmit}
             className=""
           >
-            <textarea {...register("userPrompt")} placeholder="Enter your plot." />
+            <textarea name="userPrompt" placeholder="Enter your plot." onChange={(e) => setUserPrompt(e.target.value)}/>
             <button type="submit">Submit</button>
           </form>
         </div>
