@@ -1,8 +1,9 @@
 import React from 'react'
+import AISearch from '../components/AISearch'
 
 const Home = () => {
   return (
-    <div>Home</div>
+    <div><AISearch /></div>
   )
 }
 
