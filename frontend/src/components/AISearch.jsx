@@ -25,7 +25,7 @@ const AISearch = () => {
     <section>
       <div>
         <h1>
-          Find movies based on the plot you vaguely remember.
+          Find movies based on the plot you vaguely remember or depending on your mood.
         </h1>
         <div>
           <form 

@@ -1,30 +1,42 @@
-import Replicate from "replicate";
-
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN,
-});
+import { LLM } from "llama-node";
+import { LLMRS } from "llama-node/dist/llm/llm-rs.js";
+import path from "path";
+const model = path.resolve(process.cwd(), "../ggml-alpaca-7b-q4.bin");
+const llama = new LLM(LLMRS);
+const template = `how are you`;
+const prompt = `Below is an instruction that describes a task. Write a response that appropriately completes the request.`
 
 export const aiChat = async(req, res) => {
   const userPrompt = req.body.userPrompt;
 
   try {
-    const input = {
-      debug: false,
-      top_k: 50,
-      top_p: 1,
-      prompt: userPrompt,
-      temperature: 0.5,
-      system_prompt: "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\n\nIf a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information. Only give the name of the movies in json format that are similar.",
-      max_new_tokens: 500,
-      min_new_tokens: -1
-    };
-
-    console.log("Running the model...");
-
-    const movieName = await replicate.run("meta/llama-2-70b-chat", { input });
-
-    console.log(movieName.toString().replace(/[^a-zA-Z ]/g, ""));
-    res.status(200).json(movieName.toString().replace(/[^a-zA-Z ]/g, ""));
+    const params = {
+      prompt,
+      numPredict: 128,
+      temperature: 0.2,
+      topP: 1,
+      topK: 40,
+      repeatPenalty: 1,
+      repeatLastN: 64,
+      seed: 0,
+      feedPrompt: true,
+  };
+  const run = async () => {
+      const abortController = new AbortController();
+      await llama.load({ modelPath: model, modelType: "Llama" /* ModelType.Llama */ });
+      setTimeout(() => {
+          abortController.abort();
+      }, 3000);
+      try {
+          await llama.createCompletion(params, (response) => {
+              process.stdout.write(response.token);
+          }, abortController.signal);
+      }
+      catch (e) {
+          console.log(e);
+      }
+  };
+  run();
   } catch (error) {
     console.log(error);
   }

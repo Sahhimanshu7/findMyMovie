@@ -5,7 +5,10 @@ import Moods from '../components/Moods'
 const Home = () => {
   return (
     // <div><AISearch /></div>
-    <section>
+    <section className='flex flex-col items-center space-y-8'>
+      <div>
+        <AISearch />
+      </div>
       <div>
         <Moods />
       </div>
