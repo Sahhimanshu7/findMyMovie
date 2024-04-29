@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { MoodsList } from '../assets/MoodsList';
 import axios from 'axios';
+import MovieCard from '../components/MovieCard';
 
 const Movies = () => {
+  const [moviesData, setMoviesData] = useState();
   const moodPath = window.location.pathname.replace('/movies/', "");
   const GenreParams = (`${MoodsList[moodPath]}`).replaceAll(",", "%2C%");
   console.log(GenreParams);
@@ -31,7 +33,8 @@ const Movies = () => {
       await axios
         .request(options)
         .then(function (response) {
-          console.log(response.data);
+          // console.log(response.data);
+          setMoviesData(response.data.results);
         })
         .catch(function (error) {
           console.error(error);
@@ -40,9 +43,20 @@ const Movies = () => {
     getData();
   }, []);
 
-  
   return (
-    <div>Movies</div>
+    <div>
+      <h1 className='md:text-3xl text-xl text-center my-4 text-white'>{moodPath.toUpperCase()} MOVIES</h1>
+      <div className='flex flex-wrap space-x-4 gap-y-4 justify-center'>
+        {moviesData && (moviesData.map((movie) => (
+          <div>
+            <MovieCard movie={movie}/>
+          </div>
+        )))}
+      </div>
+      <button className='w-full flex justify-center py-4 text-white cursor-pointer'>
+        Load More
+      </button>
+    </div>
   )
 }
 

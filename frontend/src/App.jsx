@@ -3,6 +3,7 @@ import "./App.css"
 import Header from "./components/Header"
 import Home from "./pages/Home"
 import Movies from "./pages/Movies"
+import Movie from "./pages/Movie";
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" exact element={<Home />} />
-          <Route path="/movies/:mood" element={<Movies />} />
+          <Route path="/movies/:mood" exact element={<Movies />} />
+          <Route path="/movie/:id" exact element={<Movie />} />
         </Routes>
       </Router>
     </div>
