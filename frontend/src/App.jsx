@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import "./App.css"
 import Header from "./components/Header"
 import Home from "./pages/Home"
+import Movies from "./pages/Movies"
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" exact element={<Home />} />
+          <Route path="/movies/:mood" element={<Movies />} />
         </Routes>
       </Router>
     </div>

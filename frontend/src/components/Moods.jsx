@@ -5,7 +5,7 @@ const Moods = () => {
   const navigate = useNavigate();
   const handleSelect = (mood) =>{
     console.log(mood);
-    navigate("/");
+    navigate(`/movies/${mood}`);
   }
   return (
     <section className='md:max-w-[60vw]'>
